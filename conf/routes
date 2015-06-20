@@ -1,0 +1,28 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+# Views
+GET        /                               controllers.MainPage.index
+
+GET        /appview                        controllers.AppPage.index
+
+# REST Services
+GET        /rest/apps                      controllers.Redirect.to(url = "/rest/apps/")
+GET        /rest/apps/                     controllers.Applications.loadAction()
+
+GET        /rest/apps/:name                controllers.App.loadAction(name: String)
+GET        /rest/apps/:name/               controllers.App.loadAction(name: String)
+
+GET        /rest/apps/:name/events         controllers.AppEvent.loadAction(name: String)
+GET        /rest/apps/:name/events/        controllers.AppEvent.loadAction(name: String)
+
+GET        /rest/apps/:name/logs            controllers.AppLog.loadAction(name: String)
+GET        /rest/apps/:name/logs/           controllers.AppLog.loadAction(name: String)
+
+GET        /rest/refresh                   controllers.Redirect.to(url = "/rest/refresh/")
+GET        /rest/refresh/                  controllers.RefreshDate.loadAction()
+
+
+GET        /assets/*file                   controllers.Assets.at(path="/public", file)
