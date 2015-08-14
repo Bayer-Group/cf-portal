@@ -16,7 +16,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
 
     val updateActor = Akka.system.actorOf(Props[dbUpdater])
-    Akka.system(app).scheduler.schedule(5 minutes, 5 minutes)(updateActor ! "update db")
+    Akka.system(app).scheduler.schedule(30 seconds, 5 minutes)(updateActor ! "update db")
 
     println("App Starting....")
     loadDB()
@@ -32,9 +32,6 @@ object Global extends GlobalSettings {
     play.api.db.slick.DB.withSession{ implicit session =>
       CFApplicationTable.apps.ddl.create
       Updates.updates.ddl.create
-
-      lazy val applicationDao = new CFApplicationDao
-      applicationDao.loadAll().foreach(CFApplicationTable.apps.insert)
 
       val date = Calendar.getInstance().getTime().toString
       val updateTime = new Updated(1,date)
