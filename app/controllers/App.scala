@@ -32,7 +32,7 @@ object App extends App(new Settings("cf")) {
     def cfClient = new CloudFoundryClient(credentials, URI.create(url).toURL, true)
     def cfSpaceClient(space: CloudSpace) = new CloudFoundryClient(credentials, URI.create(url).toURL, space, true)
 
-    val buildpack = cfClient.getApplication(name.toString).getStaging().getDetectedBuildpack
+    val buildpack = Option(cfClient.getApplication(name.toString).getStaging().getDetectedBuildpack).getOrElse(cfClient.getApplication(name.toString).getStaging().getBuildpackUrl)
 
     cfClient.getApplicationStats(name.toString).getRecords.map(instance =>
         CFApp(instance.getUsage.getCpu, instance.getHost,instance.getId, instance.getUptime, instance.getState.toString,
