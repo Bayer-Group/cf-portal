@@ -10,7 +10,8 @@ $(document).ready(function () {
         success: function (data) {
             var content = $("#content");
             var tablePanel = $('<div class="panel panel-default">');
-                tablePanel.append($('<div class="panel-heading">Instances of '+GetUrlValue('name')+'</div>'));
+                tablePanel.append($('<div class="panel-heading"><p>Instances of '+ GetUrlValue('name') + '</p>' +
+                '<p>Buildpack: ' + data[0].buildpack + '</p></div>'));
                 var table = $('<table class="table table-striped table-bordered table-hover" id="instanceTable">');
                 addHeaders(table);
                 addBody(table, data);
@@ -37,10 +38,10 @@ $(document).ready(function () {
         var tableHeader = $('<thead/>');
         var headerRow = $('<tr/>');
 
-        headerRow.append($('<th style="width: 10%">ID</th>'));
-        headerRow.append($('<th style="width: 20%">Status</th>'));
-        headerRow.append($('<th style="width: 10%">CPU Usage</th>'));
-        headerRow.append($('<th style="width: 20%">Memory Usage</th>'));
+        headerRow.append($('<th style="width: 15%">ID</th>'));
+        headerRow.append($('<th style="width: 15%">Status</th>'));
+        headerRow.append($('<th style="width: 15%">CPU Usage</th>'));
+        headerRow.append($('<th style="width: 15%">Memory Usage</th>'));
         headerRow.append($('<th style="width: 20%">Uptime</th>'));
         headerRow.append($('<th style="width: 20%">Host</th>'));
         tableHeader.append(headerRow);

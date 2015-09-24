@@ -32,8 +32,11 @@ object App extends App(new Settings("cf")) {
     def cfClient = new CloudFoundryClient(credentials, URI.create(url).toURL, true)
     def cfSpaceClient(space: CloudSpace) = new CloudFoundryClient(credentials, URI.create(url).toURL, space, true)
 
-    cfClient.getApplicationStats(name.toString).getRecords.map(instance => CFApp(instance.getUsage.getCpu, instance.getHost,
-      instance.getId, instance.getUptime, instance.getState.toString, instance.getName, instance.getUsage.getMem)).toVector
+    val buildpack = cfClient.getApplication(name.toString).getStaging().getDetectedBuildpack
+
+    cfClient.getApplicationStats(name.toString).getRecords.map(instance =>
+        CFApp(instance.getUsage.getCpu, instance.getHost,instance.getId, instance.getUptime, instance.getState.toString,
+          instance.getName, instance.getUsage.getMem, Option(buildpack).getOrElse("buildpack not recognized!"))).toVector
  }
 
 }
