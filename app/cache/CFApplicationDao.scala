@@ -24,11 +24,10 @@ class CFApplicationDao {
       cfClient.getSpaces.asScala.par.flatMap(space => {
         val spaceClient = cfSpaceClient(space)
         spaceClient.getApplications.map(app => CFApplication(app.getName, space.getOrganization.getName, space.getName, app.getUris,
-          app.getState.toString, app.getMeta.getGuid.toString))
+          app.getState.toString, app.getMeta.getGuid.toString,
+          Option(Option(app.getStaging.getDetectedBuildpack).getOrElse(app.getStaging.getBuildpackUrl)).getOrElse("buildpack not recognized!")))
       }).toVector
     }
 }
-
-
 
 

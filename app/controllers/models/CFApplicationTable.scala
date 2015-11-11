@@ -15,8 +15,9 @@ class CFApplicationTable(tag: Tag) extends Table[CFApplication](tag, CFApplicati
   def uris = column[String]("URIS")
   def state = column[String]("STATE")
   def guid = column[String]("GUID", O.PrimaryKey)
+  def buildpack = column[String]("BUILDPACK")
 
-  def * = (name, org, space, uris, state, guid) <> (CFApplication.fromDB, CFApplication.unapplyFromDB)
+  def * = (name, org, space, uris, state, guid, buildpack) <> (CFApplication.fromDB, CFApplication.unapplyFromDB)
 
 }
 
