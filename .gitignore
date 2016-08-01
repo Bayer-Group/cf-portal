@@ -1,6 +1,8 @@
 logs
+conf/application.conf.secret
 project/project
 project/target
+projectFilesBackuptarget
 target
 tmp
 .history

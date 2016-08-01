@@ -24,5 +24,7 @@ GET        /rest/apps/:name/logs/           controllers.AppLog.loadAction(name: 
 GET        /rest/refresh                   controllers.Redirect.to(url = "/rest/refresh/")
 GET        /rest/refresh/                  controllers.RefreshDate.loadAction()
 
+GET        /metrics                       controllers.Redirect.to(url = "/metrics/")
+GET        /metrics/                      controllers.PrometheusMetricsController.loadAction()
 
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)
