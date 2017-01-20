@@ -17,17 +17,23 @@ class CFApplicationDao {
     lazy val credentials = new CloudCredentials(settings("user"), settings("password"))
     lazy val url = settings("url")
 
-    def loadAll() = {
-      def cfClient = new CloudFoundryClient(credentials, URI.create(url).toURL, true)
-      def cfSpaceClient(space: CloudSpace) = new CloudFoundryClient(credentials, URI.create(url).toURL, space, true)
-
-      cfClient.getSpaces.asScala.par.flatMap(space => {
-        val spaceClient = cfSpaceClient(space)
-        spaceClient.getApplications.map(app => CFApplication(app.getName, space.getOrganization.getName, space.getName, app.getUris,
-          app.getState.toString, app.getMeta.getGuid.toString,
-          Option(Option(app.getStaging.getDetectedBuildpack).getOrElse(app.getStaging.getBuildpackUrl)).getOrElse("buildpack not recognized!")))
-      }).toVector
+  def getBuildpack(detectedBuildpack: String, buildpackUrl: String) : String = {
+      val temp = Option(detectedBuildpack).getOrElse("")
+      val buildpack = if (temp.nonEmpty) temp else Option(buildpackUrl).getOrElse("buildpack not recognized!")
+      buildpack
     }
+
+  def loadAll() = {
+    def cfClient = new CloudFoundryClient(credentials, URI.create(url).toURL, true)
+    def cfSpaceClient(space: CloudSpace) = new CloudFoundryClient(credentials, URI.create(url).toURL, space, true)
+
+    cfClient.getSpaces.asScala.par.flatMap(space => {
+      val spaceClient = cfSpaceClient(space)
+      spaceClient.getApplications.map(app => CFApplication(app.getName, space.getOrganization.getName, space.getName, app.getUris,
+        app.getState.toString, app.getMeta.getGuid.toString,
+        getBuildpack(app.getStaging.getDetectedBuildpack, app.getStaging.getBuildpackUrl)))
+    }).toVector
+  }
 }
 
 

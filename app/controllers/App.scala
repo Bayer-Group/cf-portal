@@ -28,15 +28,20 @@ object App extends App(new Settings("cf")) {
     Ok(app.toJson.prettyPrint).as("application/json")
   }
 
+  def getBuildpack(detectedBuildpack: String, buildpackUrl: String) : String = {
+    val temp = Option(detectedBuildpack).getOrElse("")
+    val buildpack = if (temp.nonEmpty) temp else Option(buildpackUrl).getOrElse("buildpack not recognized!")
+    buildpack
+  }
+
   def load(name: String) = {
     def cfClient = new CloudFoundryClient(credentials, URI.create(url).toURL, true)
     def cfSpaceClient(space: CloudSpace) = new CloudFoundryClient(credentials, URI.create(url).toURL, space, true)
 
-    val buildpack = Option(cfClient.getApplication(name.toString).getStaging().getDetectedBuildpack).getOrElse(cfClient.getApplication(name.toString).getStaging().getBuildpackUrl)
-
     cfClient.getApplicationStats(name.toString).getRecords.map(instance =>
         CFApp(instance.getUsage.getCpu, instance.getHost,instance.getId, instance.getUptime, instance.getState.toString,
-          instance.getName, instance.getUsage.getMem, Option(buildpack).getOrElse("buildpack not recognized!"))).toVector
+          instance.getName, instance.getUsage.getMem, getBuildpack(cfClient.getApplication(name.toString).getStaging().getDetectedBuildpack
+            , cfClient.getApplication(name.toString).getStaging().getBuildpackUrl))).toVector
  }
 
 }
