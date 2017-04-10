@@ -20,14 +20,11 @@ uaac member add cloud_controller.admin cfapi
 ```
 
 ### User Configuration
-To configure the application for your enviornment, edit the following section in the conf/application.conf file to reflect the username and password of the admin account you created as well as the api url for your cloudfoundry installation
+To configure the application for your enviornment, set the following enviornment variables to reflect the username and password of the admin account you created as well as the api url for your cloudfoundry installation
 ```
-# CF connection info
-cf : {
-  user: "cfapi"
-  password: "password"
-  url: "https://api.company.com"
-}
+  USER: "cfapi"
+  PASSWORD: "password"
+  URL: "https://api.company.com"
 ```
 
 ### Update Frequency
